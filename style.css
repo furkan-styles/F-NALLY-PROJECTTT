@@ -1,0 +1,297 @@
+* { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+/* 1. ANA ZEMİN: Monitörde parlamayan, tok bir lacivert-gri tonu */
+body { margin: 0; background-color: #1e293b; color: #f1f5f9; line-height: 1.6; }
+
+/* 2. ÜST BİLGİ BARI (Koyu Lacivert + Kırmızı Aciliyet Çizgisi) */
+header { 
+    background-color: #0f172a; 
+    color: white; 
+    padding: 25px; 
+    text-align: center; 
+    border-bottom: 5px solid #e74c3c; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+header h1 { margin: 0; font-size: 2.2rem; letter-spacing: 1px; }
+
+/* 3. ANA KAPSAYICI */
+.container { max-width: 1400px; margin: 40px auto; padding: 0 20px; }
+
+/* 4. KATEGORİ FİLTRE BUTONLARI */
+.kategoriler { display: flex; gap: 12px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+.kategoriler button { 
+    padding: 12px 28px; background: #334155; color: #f1f5f9; 
+    border: 1px solid #475569; border-radius: 8px; cursor: pointer; 
+    font-weight: 700; transition: all 0.3s ease; 
+}
+.kategoriler button:hover { background: #e67e22; border-color: #e67e22; color: white; transform: translateY(-2px); }
+
+/* 5. ANA DÜZEN */
+.ana-layout { display: flex; gap: 30px; flex-wrap: wrap; }
+.sol-panel { flex: 3; min-width: 300px; }
+
+/* SAĞ PANEL (Görev Listesi Kutusu) */
+.sag-panel { 
+    flex: 1; min-width: 280px; background: #334155; padding: 25px; 
+    border-radius: 12px; border-top: 5px solid #e67e22; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
+    height: fit-content; position: sticky; top: 20px; 
+}
+
+.sol-panel h2, .sag-panel h2 { color: #ffffff; margin-top: 0; border-bottom: 2px solid #475569; padding-bottom: 10px; }
+
+/* 6. İLAN KARTLARI (Koyu Lacivert Kartlar, Açık Yazılar) */
+.grid-yapi { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+.ilan-karti { 
+    background: #334155; padding: 22px; border-radius: 12px; 
+    border-left: 6px solid #e74c3c; 
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3); 
+    display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease; 
+}
+.ilan-karti:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.5); background: #3e4e63; }
+.ilan-karti h3 { margin: 10px 0; color: #ffffff; font-size: 1.35rem; }
+.ilan-karti p { color: #cbd5e1; font-size: 0.95rem; margin-bottom: 20px; }
+
+/* BUTONLAR */
+.ilan-karti button { width: 100%; padding: 12px; background: #27ae60; color: white; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+.ilan-karti button:hover { background: #2ecc71; transform: scale(1.02); }
+
+/* 7. GÖREV LİSTESİ SATIRLARI */
+#gorevlerim-listesi li { margin-bottom: 12px; padding: 12px; background: #1e293b; border-radius: 6px; border-left: 4px solid #27ae60; color: #f1f5f9; font-weight: 600; }
+
+
+.modal-arkaplan {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85); /* Arka planı koyulaştır */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal kutusu aynı kalıyor */
+.modal-kutu {
+    background: #1e272e; /* Modern Kriz Antrasiti */
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 480px; /* PC'de çok yayılmasın */
+    position: relative;
+    border-top: 6px solid var(--kriz-turuncu); /* PraTech/Kriz Turuncusu */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Başlık ve Kapatma Butonu aynı kalıyor */
+.modal-kutu h3 { color: #ffffff !important; margin-top: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 8px;}
+.kapat-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; color: #7f8c8d; }
+.kapat-btn:hover { color: var(--kriz-kirmizi); }
+
+/* --- İŞTE İSTENEN DİKEY MANTIK --- */
+#yardim-formu {
+    display: flex;
+    flex-direction: column; /* Her eleman alt alta dizilecek */
+    gap: 15px; /* Aralarındaki boşluk */
+    margin-top: 15px;
+}
+
+/* --- FORM ALANLARI (INPUT & SELECT) GÜNCELLEMESİ --- */
+#yardim-formu input,
+#yardim-formu select {
+    padding: 12px;
+    border: 2px solid #ecf0f1;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #ffffff; /* Yazılar artık BEYAZ */
+    background-color: #2c3e50; /* Alanlar koyu */
+    transition: 0.3s;
+    width: 100%; /* Tam genişlik */
+}
+
+/* --- YAZILARI BEYAZ YAPMA (PLACEHOLDER) --- */
+#yardim-formu input::placeholder,
+#yardim-formu select option:first-child {
+    color: #f1f5f9; /* Placeholder ve ilk seçenek BEYAZIMSI/ÇOK AÇIK GRİ */
+    opacity: 0.8;
+}
+
+/* Odaklanınca kenarlık turuncu olsun */
+#yardim-formu input:focus,
+#yardim-formu select:focus {
+    outline: none;
+    border-color: var(--kriz-turuncu);
+    background-color: #34495e;
+}
+
+/* Devre dışı alanlar soluk */
+#yardim-formu select:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    color: #7f8c8d;
+}
+
+/* --- GÖNDER BUTONU DİKEY VE TAM GENİŞLİK --- */
+.gonder-btn {
+    background: var(--kriz-koyu);
+    color: white;
+    padding: 14px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%; /* Tam genişlik */
+}
+.gonder-btn:hover {
+    background: var(--kriz-yesil);
+}
+
+/* --- DUYARLI DÜZENLEME (MOBILE-FIRST) --- */
+@media (max-width: 768px) {
+    .modal-kutu {
+        width: 95%; /* Telefonda kenarlardan daha az boşluk */
+        padding: 20px;
+    }
+    .modal-kutu h3 { font-size: 1.2rem; }
+}
+
+.btn-notr {
+    background-color: #475569 !important; /* Tok ve şık bir endüstriyel gri */
+    color: #ffffff !important;
+    font-weight: bold !important;
+    transition: 0.3s !important;
+}
+
+/* Gri butonun üzerine mouse gelince hafif koyulaşsın */
+.btn-notr:hover {
+    background-color: #334155 !important; 
+    transform: scale(1.02) !important;
+}
+
+/* 2. Seçilmiş Hali - TIKLANINCA YEŞİLE DÖNECEK */
+.btn-secildi {
+    background-color: #27ae60 !important; /* Görevin alındığını belli eden net yeşil */
+    color: #ffffff !important;
+    font-weight: bold !important;
+    transition: 0.3s !important;
+}
+
+/* Yeşil butonun üzerine mouse gelince */
+.btn-secildi:hover {
+    background-color: #219150 !important;
+}
+
+
+/* 1. Modal (Form) Kutusunun Etrafına Turuncu Çerçeve */
+.modal-kutu {
+    border: 2px solid #e67e22 !important; /* Kutunun her tarafını turuncu sarar */
+    border-top: 6px solid #e67e22 !important; /* Üst tarafı ekstra kalın kalsın */
+}
+
+/* 2. Talebi İlet Butonu (Aciliyet ve Odak Rengi) */
+.gonder-btn {
+    background-color: #e67e22 !important; /* PraTech / Acil Durum Turuncusu */
+    color: #ffffff !important;
+    padding: 15px !important;
+    margin-top: 20px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    font-size: 1.2rem !important;
+    letter-spacing: 1px !important;
+    cursor: pointer !important;
+    transition: 0.3s !important;
+    width: 100% !important;
+}
+
+/* Butonun üzerine mouse gelince hafif koyulaşsın ve büyüsün */
+.gonder-btn:hover {
+    background-color: #d35400 !important;
+    transform: scale(1.02) !important;
+}
+
+.talep-sayaci {
+    background-color: #e74c3c;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(231, 76, 60, 0.5);
+    animation: pulse 2s infinite; /* Sayı dikkat çeksin diye hafifçe yanıp söner */
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+.ust-menuler {
+    display: flex;
+    gap: 15px;
+    max-width: 1200px;
+    margin: 15px auto 20px auto; /* Yukarıdan ve aşağıdan boşluk bırakarak ortalar */
+    padding: 0 20px;
+}
+
+.nav-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none; /* Linklerin altındaki çizgiyi yok eder */
+    font-weight: bold;
+    color: white;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Ana Sayfa Butonu (Ağırbaşlı Gri) */
+.btn-geri {
+    background-color: #475569;
+}
+.btn-geri:hover {
+    background-color: #334155;
+    transform: translateY(-2px); /* Üzerine gelince hafifçe havaya kalkar */
+}
+
+/* İlan Ver Butonu (Dikkat Çekici Turuncu) */
+.btn-ilan {
+    background-color: #e67e22;
+}
+.btn-ilan:hover {
+    background-color: #d35400;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .ana-layout {
+        display: flex;
+        flex-direction: column; /* Mobilde elemanları alt alta diz */
+    }
+
+    .sag-panel {
+        order: -1; /* Eksi 1 değeri vererek sağ paneli EN TEPEYE fırlatırız */
+        margin-bottom: 25px; /* Altına gelecek olan ilanlarla arasına boşluk koy */
+        position: static !important; /* Eğer masaüstü için sticky (yapışkan) yaptıysak mobilde iptal et */
+        width: 100%;
+    }
+    
+    /* Mobilde kategorilerin taşmasını veya daralmasını engellemek için */
+    .kategoriler {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}

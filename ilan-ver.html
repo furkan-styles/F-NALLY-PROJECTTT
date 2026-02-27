@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yeni İlan Ver</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        background-color: #0f172a;
+      }
+      .form-kapsayici {
+        background: #1e293b;
+        padding: 40px;
+        border-radius: 12px;
+        border-top: 6px solid #e67e22;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        max-width: 600px;
+        width: 100%;
+        margin-top: 20px;
+      }
+      .form-kapsayici h2 {
+        color: white;
+        margin-top: 0;
+        border-bottom: 2px solid #334155;
+        padding-bottom: 10px;
+      }
+      .form-grup {
+        margin-bottom: 20px;
+        background: #0f172a;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #334155;
+      }
+      .form-grup label {
+        display: block;
+        color: #e2e8f0;
+        margin-bottom: 12px;
+        font-weight: bold;
+        border-bottom: 1px dashed #475569;
+        padding-bottom: 5px;
+      }
+      .form-grup input,
+      .form-grup select,
+      .form-grup textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #475569;
+        background: #1e293b;
+        color: white;
+        font-size: 1rem;
+        margin-bottom: 10px;
+      }
+      .form-grup input:focus,
+      .form-grup select:focus,
+      .form-grup textarea:focus {
+        outline: none;
+        border-color: #e67e22;
+      }
+      .geri-btn {
+        background: #475569;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        display: inline-block;
+        transition: 0.3s;
+      }
+      .geri-btn:hover {
+        background: #334155;
+        transform: translateX(-5px);
+      }
+      #ozel-ilan-alani {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="width: 100%; max-width: 600px">
+      <a href="index.html" class="geri-btn">⬅️ Ana Sayfaya Dön</a>
+    </div>
+
+    <div class="form-kapsayici">
+      <h2>📢 Yardım Talebi Oluştur</h2>
+      <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px">
+        İhtiyacınızı ve konumunuzu eksiksiz girin. Ekiplerimiz verdiğiniz
+        iletişim numarası üzerinden size ulaşacaktır.
+      </p>
+
+      <form id="yeni-ilan-formu">
+        <div class="form-grup">
+          <label>👤 İletişim Bilgileri</label>
+          <input
+            type="text"
+            id="ilan-isim"
+            placeholder="İsim Soyisim"
+            required
+          />
+          <input
+            type="tel"
+            id="telefon"
+            placeholder="Telefon Numaranız (Örn: 0555...)"
+            pattern="[0-9]{10,11}"
+            title="Lütfen 10 veya 11 haneli geçerli bir numara girin"
+            required
+          />
+        </div>
+
+        <div class="form-grup">
+          <label>📍 Hedef Konum</label>
+          <select id="ilan-sehir" onchange="ilceDoldur()" required>
+            <option value="">İl Seçiniz</option>
+          </select>
+          <select id="ilan-ilce" onchange="mahalleDoldur()" disabled required>
+            <option value="">Önce İl Seçiniz</option>
+          </select>
+          <select id="ilan-mahalle" disabled required>
+            <option value="">Önce İlçe Seçiniz</option>
+          </select>
+        </div>
+
+        <div class="form-grup">
+          <label>🚨 İhtiyaç Türü</label>
+          <select id="ihtiyac-secimi" required>
+            <option value="">Lütfen acil bir ihtiyaç seçin...</option>
+            <option value="1">Bebek Maması ve Temiz Su</option>
+            <option value="2">Öğrenci Evinde Boş Oda (Barınma)</option>
+            <option value="3">İnsülin ve Soğutucu Çanta</option>
+            <option value="4">Geçici Yuva veya Klinik Aracı (Hayvanlar)</option>
+            <option value="5">Ücretsiz YKS Matematik Dersi</option>
+            <option value="6">İkinci El Laptop İhtiyacı</option>
+            <option value="7">Gönüllü Psikolog Desteği</option>
+            <option value="8">Powerbank ve Şarj İstasyonu</option>
+            <option value="ozel" style="font-weight: bold; color: #e67e22">
+              ⚠️ Farklı Bir İhtiyacım Var (Özel İlan)
+            </option>
+          </select>
+        </div>
+
+        <div
+          id="ozel-ilan-alani"
+          class="form-grup"
+          style="border-color: #e67e22"
+        >
+          <label style="color: #e67e22">⚠️ Özel İlan Detayları</label>
+          <input
+            type="text"
+            id="ilan-baslik"
+            placeholder="Örn: 3 Aile için Çadır İhtiyacı"
+          />
+          <textarea
+            id="ilan-aciklama"
+            rows="4"
+            placeholder="Durumu ve tam ihtiyacı anlatın..."
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="gonder-btn"
+          style="
+            width: 100%;
+            padding: 15px;
+            background: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+          "
+        >
+          Talebi Sistemlere İlet 🚀
+        </button>
+      </form>
+    </div>
+
+    <script>
+      const lojistikAg = {
+        Düzce: {
+          Merkez: ["Kültür Mah.", "Uzunmustafa Mah.", "Konuralp"],
+          Akçakoca: ["Osmaniye Mah.", "Yalı Mah."],
+        },
+        Hatay: {
+          Antakya: ["Emek Mah.", "Cebrail Mah."],
+          Defne: ["Armutlu Mah.", "Sümerler Mah."],
+        },
+        Kahramanmaraş: { Pazarcık: ["Narlı Mah."], Elbistan: ["Güneşli Mah."] },
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const sehirSelect = document.getElementById("ilan-sehir");
+        for (let sehir in lojistikAg) {
+          sehirSelect.add(new Option(sehir, sehir));
+        }
+      });
+
+      function ilceDoldur() {
+        const sehir = document.getElementById("ilan-sehir").value;
+        const ilceSel = document.getElementById("ilan-ilce");
+        const mahSel = document.getElementById("ilan-mahalle");
+
+        ilceSel.innerHTML = '<option value="">İlçe Seçiniz</option>';
+        mahSel.innerHTML = '<option value="">Önce İlçe Seçiniz</option>';
+        mahSel.disabled = true;
+
+        if (sehir) {
+          ilceSel.disabled = false;
+          for (let ilce in lojistikAg[sehir]) {
+            ilceSel.add(new Option(ilce, ilce));
+          }
+        } else {
+          ilceSel.disabled = true;
+        }
+      }
+
+      function mahalleDoldur() {
+        const sehir = document.getElementById("ilan-sehir").value;
+        const ilce = document.getElementById("ilan-ilce").value;
+        const mahSel = document.getElementById("ilan-mahalle");
+
+        mahSel.innerHTML = '<option value="">Mahalle Seçiniz</option>';
+
+        if (ilce) {
+          mahSel.disabled = false;
+          lojistikAg[sehir][ilce].forEach((m) => mahSel.add(new Option(m, m)));
+        } else {
+          mahSel.disabled = true;
+        }
+      }
+
+      const secimKutusu = document.getElementById("ihtiyac-secimi");
+      const ozelAlan = document.getElementById("ozel-ilan-alani");
+      const baslikInput = document.getElementById("ilan-baslik");
+      const aciklamaInput = document.getElementById("ilan-aciklama");
+
+      secimKutusu.addEventListener("change", function () {
+        if (this.value === "ozel") {
+          ozelAlan.style.display = "block";
+          baslikInput.required = true;
+          aciklamaInput.required = true;
+        } else {
+          ozelAlan.style.display = "none";
+          baslikInput.required = false;
+          aciklamaInput.required = false;
+        }
+      });
+
+      document
+        .getElementById("yeni-ilan-formu")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const secilenDeger = secimKutusu.value;
+          const isim = document.getElementById("ilan-isim").value;
+
+          if (secilenDeger === "ozel") {
+            alert(
+              `Sayın ${isim}, özel ilanınız tarafımıza ulaştırılmıştır. Ekiplerimiz en kısa sürede dönüş yapacaktır.`,
+            );
+            this.reset();
+            ozelAlan.style.display = "none";
+            window.location.href = "index.html";
+          } else {
+            let canliIlanlar = JSON.parse(localStorage.getItem("canliIlanlar"));
+
+            if (!canliIlanlar) {
+              canliIlanlar = [
+                {
+                  id: "1",
+                  kategori: "gida",
+                  baslik: "Bebek Maması ve Temiz Su",
+                  aciklama:
+                    "Bölgedeki 3 aile için acil 1 numara bebek maması ve 5 damacana su ihtiyacı.",
+                  talepSayisi: 47,
+                },
+                {
+                  id: "2",
+                  kategori: "barinma",
+                  baslik: "Öğrenci Evinde Boş Oda",
+                  aciklama: "Öğrenciyim geçici olarak kalacak yer arıyorum.",
+                  talepSayisi: 14,
+                },
+                {
+                  id: "3",
+                  kategori: "saglik",
+                  baslik: "İnsülin ve Soğutucu Çanta",
+                  aciklama:
+                    "Tip 1 diyabet hastası için acil insülin kalemi ve soğutucu çanta desteği.",
+                  talepSayisi: 28,
+                },
+                {
+                  id: "4",
+                  kategori: "hayvanlar",
+                  baslik: "Geçici Yuva veya Klinik Aracı",
+                  aciklama:
+                    "Yaralı 2 kedi için acil nakil aracı ve geçici yuva sağlayabilecek gönüllüler aranıyor.",
+                  talepSayisi: 9,
+                },
+                {
+                  id: "5",
+                  kategori: "egitim",
+                  baslik: "Ücretsiz YKS Matematik Dersi",
+                  aciklama:
+                    "Sınava hazırlanan depremzede öğrencilere online veya yüz yüze matematik desteği.",
+                  talepSayisi: 35,
+                },
+                {
+                  id: "6",
+                  kategori: "esya",
+                  baslik: "İkinci El Laptop İhtiyacı",
+                  aciklama:
+                    "Uzaktan eğitim gören üniversite öğrencisi için çalışır durumda bilgisayar.",
+                  talepSayisi: 12,
+                },
+                {
+                  id: "7",
+                  kategori: "psikoloji",
+                  baslik: "Gönüllü Psikolog Desteği",
+                  aciklama:
+                    "Çocuklar için oyun terapisi ve yetişkinler için travma sonrası destek sağlayacak uzman.",
+                  talepSayisi: 22,
+                },
+                {
+                  id: "8",
+                  kategori: "lojistik",
+                  baslik: "Powerbank ve Şarj İstasyonu",
+                  aciklama:
+                    "İletişimin kopmaması için çadır kente acil çoklu şarj istasyonu ve dolu powerbank'ler.",
+                  talepSayisi: 56,
+                },
+              ];
+            }
+
+            const ilan = canliIlanlar.find(
+              (i) => String(i.id) === String(secilenDeger),
+            );
+            if (ilan) {
+              ilan.talepSayisi += 1;
+              localStorage.setItem(
+                "canliIlanlar",
+                JSON.stringify(canliIlanlar),
+              );
+
+              alert(
+                `Talebiniz alındı Sayın ${isim}! Lojistik ekiplerimiz sizinle irtibata geçecektir. Ana panele yönlendiriliyorsunuz...`,
+              );
+              setTimeout(() => {
+                window.location.assign("yardim-ustlen.html");
+              }, 500);
+            }
+          }
+        });
+    </script>
+  </body>
+</html>

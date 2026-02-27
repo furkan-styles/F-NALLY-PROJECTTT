@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yardım Üstlen</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div
+      id="kriz-bandi"
+      style="
+        display: none;
+        background: #e74c3c;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+      "
+    >
+      ⚠️ BAĞLANTI KOPTU: Çevrimdışı (Kriz) Modunda Çalışıyorsunuz. Veriler cihaz
+      hafızasından getiriliyor.
+    </div>
+
+    <header>
+      <h1>Afet Koordinasyon ve Yardım Platformu</h1>
+    </header>
+    <div class="ust-menuler">
+      <a href="index.html" class="nav-btn btn-geri">⬅️ Ana Sayfa</a>
+      <a href="ilan-ver.html" class="nav-btn btn-ilan">📢 Yeni İlan Ver</a>
+    </div>
+
+    <div class="container">
+      <div class="ana-layout">
+        <div class="sol-panel">
+          <div class="kategoriler">
+            <button onclick="kategoriFiltrele('Hepsi')">Tümü</button>
+            <button onclick="kategoriFiltrele('gida')">Gıda</button>
+            <button onclick="kategoriFiltrele('barinma')">Barınma</button>
+            <button onclick="kategoriFiltrele('saglik')">Sağlık</button>
+            <button onclick="kategoriFiltrele('hayvanlar')">Can Dostlar</button>
+          </div>
+
+          <h2>Güncel Yardım İlanları</h2>
+          <div id="ilan-listesi" class="grid-yapi"></div>
+        </div>
+
+        <div class="sag-panel">
+          <h2>Üstlendiğim Görevler</h2>
+          <button
+            id="btn-yardim-yolla"
+            style="
+              width: 100%;
+              background: #e67e22;
+              color: white;
+              padding: 10px;
+              border: none;
+              border-radius: 5px;
+              font-weight: bold;
+              cursor: pointer;
+              margin-bottom: 15px;
+            "
+          >
+            🚀 Yardım Yolla / Görevi Başlat
+          </button>
+          <ul id="gorevlerim-listesi"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="yardim-modal" class="modal-arkaplan">
+      <div class="modal-kutu">
+        <span id="modal-kapat" class="kapat-btn">&times;</span>
+        <h3 style="color: #ffffff; margin-top: 0">
+          📍 Lojistik ve Hedef Bilgileri
+        </h3>
+        <p style="font-size: 0.9rem; color: #f1f5f9">
+          Lütfen yardımı ulaştıracağınız tam konumu seçin.
+        </p>
+
+        <form id="yardim-formu">
+          <input type="text" id="isim" placeholder="İsim Soyisim" required />
+          <input
+            type="tel"
+            id="telefon"
+            placeholder="Telefon Numaranız (Örn: 0555...)"
+            pattern="[0-9]{10,11}"
+            title="Lütfen 10 veya 11 haneli geçerli bir numara girin"
+            required
+          />
+
+          <select id="sehir" onchange="ilceDoldur()" required>
+            <option value="">İl Seçiniz</option>
+          </select>
+
+          <select id="ilce" onchange="mahalleDoldur()" disabled required>
+            <option value="">Önce İl Seçiniz</option>
+          </select>
+
+          <select id="mahalle" disabled required>
+            <option value="">Önce İlçe Seçiniz</option>
+          </select>
+
+          <button type="submit" class="gonder-btn">Talebi İlet</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
